@@ -4,8 +4,8 @@ import Recipe from "./Recipe"
 interface Props {}
 
 const App: React.FC<Props> = () => {
-	const APP_ID = "73009207"
-	const APP_KEY = "7aada3a89e338f0b45ace18399f33978"
+	const APP_ID = process.env.REACT_APP_API_ID
+	const APP_KEY = process.env.REACT_APP_KEY
 
 	const [recipes, setRecipes] = useState<[]>([])
 	const [search, setSearch] = useState<string>("")
@@ -21,7 +21,7 @@ const App: React.FC<Props> = () => {
 		} catch (e) {
 			console.error(e)
 		}
-	}, [query])
+	}, [query, APP_ID, APP_KEY])
 
 	useEffect(() => {
 		getData()
