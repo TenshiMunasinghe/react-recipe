@@ -9,22 +9,28 @@ const App: React.FC<Props> = () => {
 
 	const [recipes, setRecipes] = useState<[]>([])
 	const [search, setSearch] = useState<string>("")
-	const [query, setQuery] = useState<string>("chicken")
+	// const [query, setQuery] = useState<string>("chicken")
 
-	const getData: any = useCallback(async () => {
-		try {
-			const response = await fetch(
-				`https://api.edamam.com/search?q=${query}&app_id=${APP_ID}&app_key=${APP_KEY}`
-			)
-			const data = await response.json()
-			setRecipes(data.hits)
-		} catch (e) {
-			console.error(e)
-		}
-	}, [query, APP_ID, APP_KEY])
+	const getData: any = useCallback(
+		async (text: string) => {
+			try {
+				const index = Math.floor(Math.random() * 100)
+				console.log(index)
+
+				const response = await fetch(
+					`https://api.edamam.com/search?q=${text}&app_id=${APP_ID}&app_key=${APP_KEY}&from=${index}`
+				)
+				const data = await response.json()
+				setRecipes(data.hits)
+			} catch (e) {
+				console.error(e)
+			}
+		},
+		[APP_ID, APP_KEY]
+	)
 
 	useEffect(() => {
-		getData()
+		getData("chicken")
 	}, [getData])
 
 	const handleChange = useCallback(e => {
@@ -34,10 +40,10 @@ const App: React.FC<Props> = () => {
 	const handleSubmit = useCallback(
 		e => {
 			e.preventDefault()
-			setQuery(search)
+			getData(search)
 			setSearch("")
 		},
-		[search]
+		[getData, search]
 	)
 
 	return (
